@@ -1,0 +1,11 @@
+{
+  "tema": "dark",
+  "color_acento": "dark-blue",
+  "mapa_base_defecto": "sentinel2",
+  "idioma": "es",
+  "proyecto_earth_engine": "dctiis",
+  "umbral_nubes": 20,
+  "radio_area_estudio_m": 10000,
+  "autoguardado": true,
+  "proyectos_recientes": []
+}

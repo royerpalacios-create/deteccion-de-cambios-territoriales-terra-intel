@@ -1,0 +1,45 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+build/
+dist/
+
+# Configuración local del usuario (se genera en el primer arranque)
+config/settings.json
+
+# Datos y salidas generadas por la app
+data/*.tiproj
+exports/*.csv
+exports/*.json
+exports/*.xlsx
+exports/*.docx
+exports/*.pdf
+exports/*.png
+exports/*.html
+logs/*.log
+
+# Mantener las carpetas en git aunque estén vacías
+!data/.gitkeep
+!exports/.gitkeep
+!logs/.gitkeep
+
+# Credenciales de Earth Engine (NUNCA subir a git)
+.config/earthengine/
+*.json.key
+
+# Entornos / IDE
+.vscode/
+.idea/
+*.swp
+.DS_Store
+
+# Tests
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Teselas de mapa descargadas (se regeneran solas)
+cache/
