@@ -493,7 +493,10 @@ class MainWindow(QMainWindow):
         self.map_canvas.imagen_cambios = imagen_cambios
         self.resultado_deteccion = resultado
 
-        self.results_panel.mostrar_estadisticas(resultado.estadisticas)
+        self.results_panel.mostrar_estadisticas(
+            resultado.estadisticas,
+            resultado.resumen_transicion,
+        )
         self._refrescar_vista_resultado()
         self.status_bar.set_mensaje("● Detección completada", "exito")
         self.btn_detectar.setText("🔍 DETECTAR CAMBIOS")

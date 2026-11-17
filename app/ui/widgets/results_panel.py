@@ -4,9 +4,18 @@ from __future__ import annotations
 from typing import Sequence
 
 from PyQt6.QtCore import Qt
-from PyQt6.QtWidgets import QFrame, QHBoxLayout, QScrollArea, QVBoxLayout, QWidget
+from PyQt6.QtWidgets import (
+    QFrame,
+    QHBoxLayout,
+    QHeaderView,
+    QScrollArea,
+    QTableWidget,
+    QTableWidgetItem,
+    QVBoxLayout,
+    QWidget,
+)
 
-from app.models.proyecto import EstadisticaCambio
+from app.models.proyecto import EstadisticaCambio, ResumenTransicion
 from app.ui.theme import etiqueta, rgba
 
 
@@ -52,11 +61,98 @@ class ResultsPanel(QScrollArea):
         self._lay.addWidget(tarjeta)
         self._lay.addStretch(1)
 
-    def mostrar_estadisticas(self, estadisticas: Sequence[EstadisticaCambio]) -> None:
+    def mostrar_estadisticas(
+        self,
+        estadisticas: Sequence[EstadisticaCambio],
+        resumen_transicion: ResumenTransicion | None = None,
+    ) -> None:
         self.limpiar()
+        if resumen_transicion is not None:
+            self._lay.addWidget(etiqueta("Matriz de transición T1 → T2", 13, True))
+            if resumen_transicion.total_pixeles is None:
+                self._lay.addWidget(etiqueta(
+                    "Sin datos válidos; las celdas muestran no-data, no ceros.",
+                    10,
+                    tono="secundario",
+                ))
+            self._lay.addWidget(self._crear_matriz(resumen_transicion))
+            self._lay.addWidget(etiqueta("Balance por cobertura (ha)", 13, True))
+            self._lay.addWidget(self._crear_balance(resumen_transicion))
         for fila in estadisticas:
             self._lay.addWidget(self._crear_tarjeta(fila))
         self._lay.addStretch(1)
+
+    @staticmethod
+    def _crear_matriz(resumen: ResumenTransicion) -> QTableWidget:
+        tabla = QTableWidget(len(resumen.clases), len(resumen.clases))
+        tabla.setObjectName("matrizTransicion")
+        tabla.setHorizontalHeaderLabels(resumen.clases)
+        tabla.setVerticalHeaderLabels(resumen.clases)
+        tabla.setEditTriggers(QTableWidget.EditTrigger.NoEditTriggers)
+        tabla.setSelectionMode(QTableWidget.SelectionMode.NoSelection)
+        tabla.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
+        tabla.verticalHeader().setSectionResizeMode(QHeaderView.ResizeMode.ResizeToContents)
+        tabla.setMinimumHeight(190)
+        tabla.setMaximumHeight(230)
+        for fila, valores in enumerate(resumen.matriz):
+            for columna, celda in enumerate(valores):
+                texto = "—" if celda is None else (
+                    f"{celda.area_ha:.2f} ha ({celda.porcentaje:.1f}%)\n"
+                    f"{celda.pixeles} px"
+                )
+                item = QTableWidgetItem(texto)
+                item.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
+                if celda is None:
+                    item.setToolTip("No hay datos válidos para esta matriz")
+                else:
+                    item.setToolTip(f"{celda.porcentaje:.2f}% del área válida")
+                tabla.setItem(fila, columna, item)
+        return tabla
+
+    @staticmethod
+    def _crear_balance(resumen: ResumenTransicion) -> QTableWidget:
+        encabezados = (
+            "Cobertura", "T1 (ha)", "T2 (ha)", "Entradas (ha)",
+            "Salidas (ha)", "Neto (ha)", "Persistencia (ha / %)",
+        )
+        tabla = QTableWidget(len(resumen.balance), len(encabezados))
+        tabla.setObjectName("balanceTransicion")
+        tabla.setHorizontalHeaderLabels(encabezados)
+        tabla.verticalHeader().hide()
+        tabla.setEditTriggers(QTableWidget.EditTrigger.NoEditTriggers)
+        tabla.setSelectionMode(QTableWidget.SelectionMode.NoSelection)
+        tabla.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.ResizeToContents)
+        tabla.horizontalHeader().setSectionResizeMode(0, QHeaderView.ResizeMode.Stretch)
+        tabla.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
+        tabla.setMinimumHeight(150)
+        tabla.setMaximumHeight(190)
+        for fila, balance in enumerate(resumen.balance):
+            persistencia = "—"
+            if balance.persistencia_ha is not None:
+                porcentaje = (
+                    "—" if balance.persistencia_pct is None
+                    else f"{balance.persistencia_pct:.1f}%"
+                )
+                persistencia = f"{balance.persistencia_ha:.2f} / {porcentaje}"
+            valores = (
+                balance.clase,
+                balance.area_t1_ha,
+                balance.area_t2_ha,
+                balance.entradas_ha,
+                balance.salidas_ha,
+                balance.neto_ha,
+                persistencia,
+            )
+            for columna, valor in enumerate(valores):
+                if columna == 0 or isinstance(valor, str):
+                    texto = str(valor)
+                else:
+                    texto = "—" if valor is None else f"{valor:.2f}"
+                item = QTableWidgetItem(texto)
+                if columna:
+                    item.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
+                tabla.setItem(fila, columna, item)
+        return tabla
 
     @staticmethod
     def _crear_tarjeta(fila: EstadisticaCambio) -> QFrame:

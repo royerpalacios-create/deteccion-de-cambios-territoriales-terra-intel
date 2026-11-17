@@ -41,6 +41,40 @@ class EstadisticaCambio:
         }
 
 
+@dataclass(frozen=True)
+class CeldaTransicion:
+    """Valor de una celda de la matriz T1→T2 sobre píxeles válidos."""
+
+    pixeles: int
+    area_ha: float
+    porcentaje: float
+
+
+@dataclass(frozen=True)
+class BalanceCobertura:
+    """Balance de área de una clase entre T1 y T2."""
+
+    clase: str
+    area_t1_ha: float | None
+    area_t2_ha: float | None
+    entradas_ha: float | None
+    salidas_ha: float | None
+    neto_ha: float | None
+    persistencia_ha: float | None
+    persistencia_pct: float | None
+
+
+@dataclass(frozen=True)
+class ResumenTransicion:
+    """Matriz de áreas y balance por clase; ``None`` representa no-data."""
+
+    clases: tuple[str, ...]
+    matriz: tuple[tuple[CeldaTransicion | None, ...], ...]
+    balance: tuple[BalanceCobertura, ...]
+    total_pixeles: int | None
+    area_total_ha: float | None
+
+
 @dataclass
 class Proyecto:
     """Proyecto de trabajo de TERRA_INTEL."""

@@ -17,7 +17,7 @@ import pytest
 pytest.importorskip("PyQt6.QtWidgets")
 
 from PIL import Image  # noqa: E402
-from PyQt6.QtWidgets import QApplication, QDialog, QMessageBox, QWidget  # noqa: E402
+from PyQt6.QtWidgets import QApplication, QDialog, QMessageBox, QTableWidget, QWidget  # noqa: E402
 
 from app.core.config import GestorConfiguracion  # noqa: E402
 from app.models.area_estudio import AreaDeEstudio  # noqa: E402
@@ -31,6 +31,11 @@ from app.ui.widgets.area_dialog import AreaEstudioDialog  # noqa: E402
 from app.ui.widgets.layer_panel import LayerPanel  # noqa: E402
 from app.ui.widgets.map_canvas import MapCanvas  # noqa: E402
 from app.ui.widgets.results_panel import ResultsPanel  # noqa: E402
+from app.utils.stats import (  # noqa: E402
+    construir_estadisticas_cambios,
+    construir_histograma_categorias,
+    construir_resumen_transicion,
+)
 
 pytestmark = pytest.mark.usefixtures("sin_red_de_mapas")
 
@@ -245,6 +250,32 @@ def test_panel_de_resultados_reemplaza_contenido(qapp):
     assert panel._lay.count() == len(ESTADISTICAS) + 1     # tarjetas + stretch
     panel.mostrar_mensaje_espera()
     assert panel._lay.count() == 2
+
+
+def test_panel_muestra_matriz_y_balance_con_cambios_menores_al_umbral(qapp):
+    transiciones = {11: (999, 9.99), 13: (1, 0.01)}
+    resumen = construir_resumen_transicion(transiciones)
+    estadisticas = construir_estadisticas_cambios(
+        construir_histograma_categorias(transiciones),
+        resumen.total_pixeles,
+        (0.0, 0.0),
+    )
+    panel = ResultsPanel()
+    panel.mostrar_estadisticas(estadisticas, resumen)
+
+    matriz = panel.findChild(QTableWidget, "matrizTransicion")
+    balance = panel.findChild(QTableWidget, "balanceTransicion")
+    assert matriz is not None and balance is not None
+    assert matriz.item(0, 2).text() == "0.01 ha (0.1%)\n1 px"
+    assert "0.10%" in matriz.item(0, 2).toolTip()
+    assert balance.item(0, 1).text() == "10.00"
+
+    sin_datos = construir_resumen_transicion({})
+    panel.mostrar_estadisticas([], sin_datos)
+    matriz_sin_datos = panel.findChild(QTableWidget, "matrizTransicion")
+    balance_sin_datos = panel.findChild(QTableWidget, "balanceTransicion")
+    assert matriz_sin_datos.item(0, 0).text() == "—"
+    assert balance_sin_datos.item(0, 1).text() == "—"
 
 
 def test_mapa_se_recompone_al_redimensionar_y_guarda_captura(qapp, tmp_path):

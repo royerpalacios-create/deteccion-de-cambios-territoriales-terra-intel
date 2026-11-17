@@ -74,6 +74,10 @@ en `exports/mapa_cambios.html`.
    (índices NDVI/NDWI/NDBI), clasifica ambas épocas (Random Forest) y calcula
    la matriz de transición entre clases de cobertura. Funciona en cualquier
    zona, no solo en Puno. En `logs/terra_intel.log` queda el tiempo de cada fase.
+   El panel presenta la matriz T1→T2 en hectáreas y porcentaje, además del
+   balance por clase (área inicial/final, entradas, salidas, cambio neto y
+   persistencia). Las celdas sin observaciones válidas se indican como no-data,
+   separadas de las transiciones cuyo valor medido es cero.
 4. Usa el panel de capas (izquierda) para mostrar/ocultar la Época A, la
    Época B o la capa de cambios, y ajustar su opacidad.
 5. **🔀 Vista**: alterna entre superposición de colores (overlay),
