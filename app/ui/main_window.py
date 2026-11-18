@@ -477,6 +477,7 @@ class MainWindow(QMainWindow):
         with cronometro("construir clasificación (perezoso)", logger):
             clasificaciones = self._clasificacion.clasificar_mosaicos_temporales(
                 self.imagen_anterior_ee, self.imagen_actual_ee, roi=roi,
+                anios=(int(self._periodo_t1[0][:4]), int(self._periodo_t2[0][:4])),   # ← NUEVO
             )
         with cronometro(f"cómputo en Earth Engine a {self._escala_analisis} m/px", logger):
             resultado = self._deteccion.detectar(
@@ -493,10 +494,7 @@ class MainWindow(QMainWindow):
         self.map_canvas.imagen_cambios = imagen_cambios
         self.resultado_deteccion = resultado
 
-        self.results_panel.mostrar_estadisticas(
-            resultado.estadisticas,
-            resultado.resumen_transicion,
-        )
+        self.results_panel.mostrar_estadisticas(resultado.estadisticas)
         self._refrescar_vista_resultado()
         self.status_bar.set_mensaje("● Detección completada", "exito")
         self.btn_detectar.setText("🔍 DETECTAR CAMBIOS")
