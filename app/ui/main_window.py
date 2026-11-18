@@ -229,10 +229,10 @@ class MainWindow(QMainWindow):
 
         # -- botones de carga y detección
         fila, f = _fila(20, 5, 20, 5, espaciado=8)
-        self.btn_cargar_anterior = boton("📂  Época Anterior", self.cargar_imagen_anterior, "panel", alto=42, px=12)
-        self.btn_cargar_actual = boton("📂  Época Actual", self.cargar_imagen_actual, "panel", alto=42, px=12)
-        self.btn_ee = boton("🛰️  Earth Engine", self.cargar_desde_ee, "verde", alto=42, px=12)
-        self.btn_detectar = boton("🔍  DETECTAR CAMBIOS", self.detectar_cambios, "peligro",
+        self.btn_cargar_anterior = boton("Época Anterior", self.cargar_imagen_anterior, "panel", alto=42, px=12)
+        self.btn_cargar_actual = boton("Época Actual", self.cargar_imagen_actual, "panel", alto=42, px=12)
+        self.btn_ee = boton("Earth Engine", self.cargar_desde_ee, "verde", alto=42, px=12)
+        self.btn_detectar = boton("DETECTAR CAMBIOS", self.detectar_cambios, "peligro",
                                   alto=42, px=14, negrita=True)
         for b in (self.btn_cargar_anterior, self.btn_cargar_actual, self.btn_ee, self.btn_detectar):
             f.addWidget(b, 1)
@@ -240,8 +240,8 @@ class MainWindow(QMainWindow):
 
         # -- vista e informe
         fila, f = _fila(20, 0, 20, 4, espaciado=8)
-        self.btn_modo_vista = boton("🔀  Vista: Overlay", self.alternar_modo_vista, "panel", alto=34, px=12)
-        self.btn_informe = boton("📄  Generar Informe PDF", lambda: self.exportar_reporte("pdf"), "verde", alto=34, px=12)
+        self.btn_modo_vista = boton("Vista: Overlay", self.alternar_modo_vista, "panel", alto=34, px=12)
+        self.btn_informe = boton("Generar Informe PDF", lambda: self.exportar_reporte("pdf"), "verde", alto=34, px=12)
         self.btn_modo_vista.setEnabled(False)
         self.btn_informe.setEnabled(False)
         f.addWidget(self.btn_modo_vista, 1)
@@ -304,7 +304,7 @@ class MainWindow(QMainWindow):
             self._limpiar_resultado()
             self._mostrar_vista_previa()
             self.label_anterior.setText(f"EPOCH A: {os.path.basename(archivo)}")
-            self.status_bar.set_mensaje(f"● Imagen anterior cargada: {os.path.basename(archivo)}")
+            self.status_bar.set_mensaje(f"Imagen anterior cargada: {os.path.basename(archivo)}")
 
     def cargar_imagen_actual(self) -> None:
         archivo, _ = QFileDialog.getOpenFileName(self, "Seleccionar Imagen Actual", "", FILTRO_IMAGENES)
@@ -315,7 +315,7 @@ class MainWindow(QMainWindow):
             self._limpiar_resultado()
             self._mostrar_vista_previa()
             self.label_actual.setText(f"EPOCH B: {os.path.basename(archivo)}")
-            self.status_bar.set_mensaje(f"● Imagen actual cargada: {os.path.basename(archivo)}")
+            self.status_bar.set_mensaje(f"Imagen actual cargada: {os.path.basename(archivo)}")
 
     def cargar_desde_ee(self) -> None:
         try:
@@ -334,7 +334,7 @@ class MainWindow(QMainWindow):
         area, periodo_t1, periodo_t2 = dialogo.area, dialogo.periodo_t1, dialogo.periodo_t2
         self._gestor_config.actualizar(radio_area_estudio_m=int(area.radio_metros))   # se recuerda el radio
 
-        self.status_bar.set_mensaje(f"● Cargando «{area.nombre}» desde Earth Engine…", "advertencia")
+        self.status_bar.set_mensaje(f"Cargando «{area.nombre}» desde Earth Engine…", "advertencia")
         self.status_bar.set_coordenadas(area.longitud, area.latitud)
         self.btn_ee.setEnabled(False)
         self._en_segundo_plano(
@@ -382,7 +382,7 @@ class MainWindow(QMainWindow):
                 f"No hay imágenes de Sentinel-2 para {datos['vacio']} con menos de {umbral}% de nubes.\n\n"
                 "Prueba con un periodo más largo, sube el umbral de nubes en Configuración o elige otra zona.",
             )
-            self.status_bar.set_mensaje("● Error: no se encontraron imágenes", "alerta")
+            self.status_bar.set_mensaje("Error: no se encontraron imágenes", "alerta")
             return
 
         self._limpiar_resultado()               # lo anterior ya no corresponde a esta zona
@@ -403,12 +403,12 @@ class MainWindow(QMainWindow):
         self.map_canvas.etiqueta_t1, self.map_canvas.etiqueta_t2 = etiqueta_a, etiqueta_b
         self.status_bar.escala.setText(f"{self._escala_analisis} m/px")
         self._mostrar_vista_previa()
-        self.status_bar.set_mensaje(f"● «{self._area_estudio.nombre}»: imágenes cargadas desde Earth Engine", "exito")
+        self.status_bar.set_mensaje(f"«{self._area_estudio.nombre}»: imágenes cargadas desde Earth Engine", "exito")
 
     def _al_fallar_carga_ee(self, error: Exception) -> None:
         self.btn_ee.setEnabled(True)
         QMessageBox.critical(self, "Error", f"Error al cargar desde Earth Engine:\n{error}")
-        self.status_bar.set_mensaje("● Error al cargar desde Earth Engine", "alerta")
+        self.status_bar.set_mensaje("Error al cargar desde Earth Engine", "alerta")
 
     def _limpiar_resultado(self) -> None:
         """Descarta una detección anterior (para no mezclarla con imágenes nuevas)."""
@@ -450,7 +450,7 @@ class MainWindow(QMainWindow):
             )
             return
 
-        self.status_bar.set_mensaje("● Detectando cambios… puede tardar 1-2 minutos", "advertencia")
+        self.status_bar.set_mensaje("Detectando cambios… puede tardar 1-2 minutos", "advertencia")
         self.btn_detectar.setText("⏳ Procesando…")
         for b in (self.btn_detectar, self.btn_modo_vista, self.btn_informe):
             b.setEnabled(False)
@@ -498,8 +498,8 @@ class MainWindow(QMainWindow):
             resultado.resumen_transicion,
         )
         self._refrescar_vista_resultado()
-        self.status_bar.set_mensaje("● Detección completada", "exito")
-        self.btn_detectar.setText("🔍 DETECTAR CAMBIOS")
+        self.status_bar.set_mensaje("Detección completada", "exito")
+        self.btn_detectar.setText("DETECTAR CAMBIOS")
         for b in (self.btn_detectar, self.btn_modo_vista, self.btn_informe):
             b.setEnabled(True)
 
@@ -518,8 +518,8 @@ class MainWindow(QMainWindow):
         else:
             mensaje = f"Error en la detección:\n{error}"
         QMessageBox.critical(self, "Error en la detección", mensaje)
-        self.status_bar.set_mensaje("● Error en la detección", "alerta")
-        self.btn_detectar.setText("🔍 DETECTAR CAMBIOS")
+        self.status_bar.set_mensaje("Error en la detección", "alerta")
+        self.btn_detectar.setText("DETECTAR CAMBIOS")
         self.btn_detectar.setEnabled(True)
         hay_resultado = self.resultado_deteccion is not None
         self.btn_modo_vista.setEnabled(hay_resultado)
@@ -556,8 +556,8 @@ class MainWindow(QMainWindow):
 
     def _fijar_modo_vista(self, modo: str) -> None:
         self.modo_vista = modo
-        self.btn_modo_vista.setText({"overlay": "🔀 Vista: Overlay", "swipe": "🔀 Vista: Swipe",
-                                     "mapa": "🔀 Vista: Mapa"}[modo])
+        self.btn_modo_vista.setText({"overlay": "Vista: Overlay", "swipe": "Vista: Swipe",
+                                     "mapa": "Vista: Mapa"}[modo])
         self._refrescar_vista_resultado()
 
     def _qimage(self, imagen):
@@ -571,7 +571,7 @@ class MainWindow(QMainWindow):
         """Pone la imagen satelital y la capa de cambios sobre un mapa navegable, georreferenciadas."""
         area = self._area_estudio
         if area is None:
-            self.status_bar.set_mensaje("● La vista de mapa necesita un área elegida con «Earth Engine»", "alerta")
+            self.status_bar.set_mensaje("La vista de mapa necesita un área elegida con «Earth Engine»", "alerta")
             self._fijar_modo_vista("overlay")
             return
         limites = limites_cuadrado(area.longitud, area.latitud, area.radio_metros)
@@ -594,7 +594,7 @@ class MainWindow(QMainWindow):
             mapa.ajustar_a_area()
             if base is not None:
                 self.status_bar.set_mensaje(
-                    "● Vista de mapa: desmarca «Época B» en Capas para ver los cambios sobre el mapa base")
+                    "Vista de mapa: desmarca «Época B» en Capas para ver los cambios sobre el mapa base")
 
     def _al_mover_mapa(self) -> None:
         self.status_bar.set_zoom(self.mapa_navegable.zoom)
@@ -606,13 +606,13 @@ class MainWindow(QMainWindow):
             self._refrescar_vista_resultado()
 
     def rescan_area(self) -> None:
-        self.status_bar.set_mensaje("● Escaneando área…", "advertencia")
+        self.status_bar.set_mensaje("Escaneando área…", "advertencia")
         self.btn_rescan.setText("⏳ Escaneando…")
         self.btn_rescan.setEnabled(False)
 
         def finalizar() -> None:
             estado = "Conectado" if self._ee_service.conectado else "No conectado"
-            self.status_bar.set_mensaje(f"● SAR-V2 Orbital Stream: Nominal ({estado})")
+            self.status_bar.set_mensaje(f"SAR-V2 Orbital Stream: Nominal ({estado})")
             self.btn_rescan.setText("↻  RE-SCAN TARGET AREA")
             self.btn_rescan.setEnabled(True)
 
@@ -626,7 +626,7 @@ class MainWindow(QMainWindow):
             if not ruta.lower().endswith(".png"):
                 ruta += ".png"
             self.map_canvas.guardar_captura(ruta)
-            self.status_bar.set_mensaje(f"● Captura guardada: {os.path.basename(ruta)}", "exito")
+            self.status_bar.set_mensaje(f"Captura guardada: {os.path.basename(ruta)}", "exito")
 
     # ------------------------------------------------------------ reportes
     def exportar_reporte(self, formato: str) -> None:
@@ -648,7 +648,7 @@ class MainWindow(QMainWindow):
                 "pdf": self._exportacion.exportar_pdf,
             }[formato]
             ruta = generador(contexto)
-            self.status_bar.set_mensaje(f"● Reporte generado: {ruta.name}", "exito")
+            self.status_bar.set_mensaje(f"Reporte generado: {ruta.name}", "exito")
             QMessageBox.information(self, "Exportación completada", f"Reporte guardado en:\n{ruta}")
         except TerraIntelError as error:
             QMessageBox.critical(self, "Error al exportar", str(error))
@@ -666,7 +666,7 @@ class MainWindow(QMainWindow):
         self.label_anterior.setText("EPOCH A: Sin imagen")
         self.label_actual.setText("EPOCH B: Sin imagen")
         self.map_canvas.mostrar_bienvenida()
-        self.status_bar.set_mensaje("● Nuevo proyecto")
+        self.status_bar.set_mensaje("Nuevo proyecto")
 
     def guardar_proyecto(self) -> None:
         if self.imagen_actual_ee is None:
@@ -690,10 +690,10 @@ class MainWindow(QMainWindow):
         except Exception as error:      # un fallo al guardar no debe tumbar la app ni ocultar el resultado
             logger.exception("No se pudo guardar el proyecto")
             QMessageBox.critical(self, "Error al guardar", f"No se pudo guardar el proyecto:\n{error}")
-            self.status_bar.set_mensaje("● Error al guardar el proyecto", "alerta")
+            self.status_bar.set_mensaje("Error al guardar el proyecto", "alerta")
             return
         self.proyecto_actual = proyecto
-        self.status_bar.set_mensaje(f"● Proyecto guardado: {ruta.name}", "exito")
+        self.status_bar.set_mensaje(f"Proyecto guardado: {ruta.name}", "exito")
 
     def abrir_proyecto(self) -> None:
         ruta, _ = QFileDialog.getOpenFileName(
@@ -717,7 +717,7 @@ class MainWindow(QMainWindow):
             self.results_panel.mostrar_estadisticas(proyecto.estadisticas)
         else:
             self.results_panel.mostrar_mensaje_espera()
-        self.status_bar.set_mensaje(f"● Proyecto abierto: {proyecto.nombre}")
+        self.status_bar.set_mensaje(f"Proyecto abierto: {proyecto.nombre}")
         QMessageBox.information(
             self, "Proyecto abierto",
             f"'{proyecto.nombre}'\nCentro: {proyecto.latitud:.4f}, {proyecto.longitud:.4f}\n"
@@ -734,7 +734,7 @@ class MainWindow(QMainWindow):
         nuevo_tema = "light" if self._gestor_config.config.tema == "dark" else "dark"
         self._gestor_config.actualizar(tema=nuevo_tema)
         self._aplicar_tema(nuevo_tema)
-        self.status_bar.set_mensaje(f"● Tema cambiado a '{nuevo_tema}'", "exito")
+        self.status_bar.set_mensaje(f"Tema cambiado a '{nuevo_tema}'", "exito")
 
     def abrir_configuracion(self) -> None:
         if SettingsDialog(self, self._gestor_config).exec() == QDialog.DialogCode.Accepted:
@@ -744,7 +744,7 @@ class MainWindow(QMainWindow):
         config = self._gestor_config.config
         self._adquisicion.umbral_nubes = config.umbral_nubes
         self._aplicar_tema(config.tema)
-        self.status_bar.set_mensaje("● Configuración guardada", "exito")
+        self.status_bar.set_mensaje("Configuración guardada", "exito")
 
     def mostrar_acerca_de(self) -> None:
         AboutDialog(self).exec()

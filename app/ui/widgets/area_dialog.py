@@ -71,7 +71,7 @@ class AreaEstudioDialog(QDialog):
         raiz.setSpacing(10)
         raiz.setContentsMargins(16, 14, 16, 14)
 
-        raiz.addWidget(etiqueta("📍  Área de Estudio", 16, True))
+        raiz.addWidget(etiqueta("Área de Estudio", 16, True))
         raiz.addWidget(etiqueta(
             "Elige una región, busca un lugar o haz clic en el mapa. El área analizada es el cuadrado verde.",
             11, tono="secundario", wrap=True))
@@ -83,8 +83,8 @@ class AreaEstudioDialog(QDialog):
         # ── Columna izquierda: regiones / mapa ──
         tabs = QTabWidget()
         tabs.setFont(fuente(11))
-        tabs.addTab(self._tab_region(), "🗺  Regiones del Perú")
-        tabs.addTab(self._tab_manual(), "📍  Mapa y coordenadas")
+        tabs.addTab(self._tab_region(), "Regiones del Perú")
+        tabs.addTab(self._tab_manual(), "Mapa y coordenadas")
         tabs.currentChanged.connect(self._on_tab_cambiado)
         self._tabs = tabs
         cuerpo.addWidget(tabs, 1)
@@ -158,7 +158,7 @@ class AreaEstudioDialog(QDialog):
         lay.addWidget(self._lbl_coords_region)
         self._on_region_cambiada(0)   # inicializar preview
 
-        lay.addWidget(boton("🗺  Ver en el mapa y ajustar", self._ver_region_en_mapa, alto=32))
+        lay.addWidget(boton("Ver en el mapa y ajustar", self._ver_region_en_mapa, alto=32))
         lay.addStretch(1)
         return w
 
@@ -175,7 +175,7 @@ class AreaEstudioDialog(QDialog):
         self._edit_busqueda.setFont(fuente(11))
         self._edit_busqueda.setPlaceholderText("Buscar un lugar: distrito, ciudad, comunidad…")
         self._edit_busqueda.returnPressed.connect(self._buscar)
-        self._btn_buscar = boton("🔍 Buscar", self._buscar, alto=32)
+        self._btn_buscar = boton("Buscar", self._buscar, alto=32)
         fila.addWidget(self._edit_busqueda, 1)
         fila.addWidget(self._btn_buscar)
         lay.addLayout(fila)

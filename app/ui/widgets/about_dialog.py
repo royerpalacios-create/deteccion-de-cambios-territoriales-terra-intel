@@ -17,7 +17,7 @@ class AboutDialog(QDialog):
 
         lay = QVBoxLayout(self)
         lay.setContentsMargins(24, 24, 24, 24)
-        lay.addWidget(etiqueta("🛰️", 40, centrado=True))
+        lay.addWidget(etiqueta("TERRA INTEL", 40, centrado=True))
         lay.addWidget(etiqueta("TERRA_INTEL", 22, True, centrado=True))
         lay.addWidget(etiqueta(f"Versión {VERSION}", 11, mono=True, tono="secundario", centrado=True))
         lay.addSpacing(10)

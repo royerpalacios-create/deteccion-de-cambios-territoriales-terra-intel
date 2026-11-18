@@ -107,21 +107,21 @@ class QuickAccessBar(QFrame):
         lay.setSpacing(6)
 
         # Botón principal — acción crítica con énfasis visual
-        lay.addWidget(boton("🔍  Detectar Cambios", c.detectar_cambios, "peligro",
+        lay.addWidget(boton("Detectar Cambios", c.detectar_cambios, "peligro",
                             alto=40, px=13, negrita=True, ancho_min=190))
 
         sep1 = QFrame(); sep1.setObjectName("separadorVertical"); sep1.setFixedWidth(1)
         lay.addWidget(sep1)
 
-        lay.addWidget(boton("💾  Guardar", c.guardar_proyecto, "panel", alto=38, ancho_min=130))
-        lay.addWidget(boton("📄  PDF", c.exportar_pdf, "panel", alto=38, ancho_min=110))
-        lay.addWidget(boton("🔀  Vista", c.alternar_vista, "panel", alto=38, ancho_min=110))
-        lay.addWidget(boton("📸  Capturar", c.capturar_mapa, "panel", alto=38, ancho_min=120))
+        lay.addWidget(boton("Guardar", c.guardar_proyecto, "panel", alto=38, ancho_min=130))
+        lay.addWidget(boton("PDF", c.exportar_pdf, "panel", alto=38, ancho_min=110))
+        lay.addWidget(boton("Vista", c.alternar_vista, "panel", alto=38, ancho_min=110))
+        lay.addWidget(boton("Capturar", c.capturar_mapa, "panel", alto=38, ancho_min=120))
 
         lay.addStretch(1)
 
         sep2 = QFrame(); sep2.setObjectName("separadorVertical"); sep2.setFixedWidth(1)
         lay.addWidget(sep2)
 
-        lay.addWidget(boton("🌗  Tema", c.alternar_tema, "panel", alto=38, ancho_min=100))
-        lay.addWidget(boton("⚙️  Config", c.abrir_configuracion, "panel", alto=38, ancho_min=100))
+        lay.addWidget(boton("Tema", c.alternar_tema, "panel", alto=38, ancho_min=100))
+        lay.addWidget(boton("Config", c.abrir_configuracion, "panel", alto=38, ancho_min=100))

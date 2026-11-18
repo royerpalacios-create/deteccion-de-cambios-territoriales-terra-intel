@@ -204,7 +204,7 @@ def test_error_en_hilo_se_muestra_y_no_bloquea_la_ui(qapp, ventana):
     w._clasificacion.clasificar_mosaicos_temporales = falla
     w.detectar_cambios()
     esperar(qapp, lambda: w.btn_detectar.isEnabled())
-    assert w.btn_detectar.text() == "🔍 DETECTAR CAMBIOS" and w.resultado_deteccion is None
+    assert w.btn_detectar.text() == "DETECTAR CAMBIOS" and w.resultado_deteccion is None
 
 
 def test_detectar_exige_imagenes_de_earth_engine(qapp, ventana):

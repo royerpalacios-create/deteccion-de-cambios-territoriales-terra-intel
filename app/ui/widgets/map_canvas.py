@@ -71,7 +71,7 @@ class MapCanvas(QWidget):
         def vista(_ancho: int, _alto: int):
             paleta = self._paleta
             return None, [
-                _texto_centrado("🛰️ TERRA_INTEL", -20, 32, True, lambda: paleta.texto_primario),
+                _texto_centrado("TERRA_INTEL", -20, 32, True, lambda: paleta.texto_primario),
                 _texto_centrado(
                     "Carga dos imágenes satelitales (o usa Earth Engine)\n"
                     "y presiona 'DETECTAR CAMBIOS' para analizar",

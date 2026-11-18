@@ -60,7 +60,7 @@ class SplashScreen(QFrame):
         lay.addStretch(1)
 
         # Icono + título
-        lbl_icon = etiqueta("🛰️", 52, centrado=True)
+        lbl_icon = etiqueta("TERRA INTEL", 52, centrado=True)
         lay.addWidget(lbl_icon)
 
         lbl_titulo = etiqueta("TERRA_INTEL", 30, True, centrado=True)

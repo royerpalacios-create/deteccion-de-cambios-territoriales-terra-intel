@@ -48,7 +48,7 @@ class ResultsPanel(QScrollArea):
         lay = QVBoxLayout(tarjeta)
         lay.setContentsMargins(16, 14, 16, 14)
         lay.setSpacing(6)
-        lbl_icono = etiqueta("🛰️", 28, centrado=True)
+        lbl_icono = etiqueta("TERRA INTEL", 28, centrado=True)
         lay.addWidget(lbl_icono)
         lay.addWidget(etiqueta("Esperando análisis", 13, True, tono="secundario", centrado=True))
         lay.addWidget(etiqueta(
